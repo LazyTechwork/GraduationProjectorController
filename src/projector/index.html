@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <base href="../../renderer/">
     <meta charset="UTF-8">
     <title>Обратный отсчёт до начала выпускного 2021</title>
     <style>
@@ -99,11 +100,11 @@
 <body>
 <h1>Выпускной 2021</h1>
 <div id="countdown">00:00:00</div>
-<img src="logo.svg" alt="" id="logo">
-<img src="rainbow.svg" alt="" id="rainbow">
-<img src="circle.svg" alt="" id="circle">
-<img src="dots.svg" alt="" id="dots">
-<img src="squares.svg" alt="" id="squares">
+<img src="static/logo.svg" alt="" id="logo">
+<img src="static/rainbow.svg" alt="" id="rainbow">
+<img src="static/circle.svg" alt="" id="circle">
+<img src="static/dots.svg" alt="" id="dots">
+<img src="static/squares.svg" alt="" id="squares">
 <script>
     const GOAL = Date.parse("2021-06-30T14:00:00");
     const countdownElement = document.getElementById("countdown");
@@ -125,8 +126,6 @@
         countdownElement.innerHTML = `${days}${hours}:${minutes}:${seconds}`;
         window.requestAnimationFrame(cycle);
     }
-
-    cycle();
 </script>
 </body>
 </html>
