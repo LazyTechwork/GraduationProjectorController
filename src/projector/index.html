@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Обратный отсчёт до начала выпускного 2021</title>
+    <style>
+        *, *:before, *:after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'TT Commons', sans-serif;
+        }
+
+        html, body {
+            background: #0E1130;
+            color: #ffffff;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        h1 {
+            font-size: 42pt;
+            font-weight: normal;
+            z-index: 150;
+        }
+
+        #countdown {
+            font-weight: bold;
+            font-size: 136pt;
+            z-index: 150;
+        }
+
+        #rainbow {
+            position: fixed;
+            bottom: -32vh;
+            right: 0;
+            width: 20vw;
+            animation: bouncing 5s ease-in-out 0s infinite alternate both;
+        }
+
+        #dots {
+            position: fixed;
+            width: 12vw;
+            right: 5vw;
+            top: 10vh;
+            animation: bouncing 8s ease-in-out 0s infinite alternate both;
+        }
+
+        #squares {
+            position: fixed;
+            left: 4vw;
+            bottom: 10vh;
+            width: 19vw;
+            animation: bouncing 3s ease-in-out 0s infinite alternate both;
+        }
+
+        #circle {
+            position: fixed;
+            bottom: 6vh;
+            right: 14vw;
+            width: 14vw;
+            animation: bouncing 4.5s ease-in-out 0s infinite alternate both;
+        }
+
+        #logo {
+            position: fixed;
+            top: 7.5vh;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            height: 9vh;
+        }
+
+        @keyframes bouncing {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-100px);
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>Выпускной 2021</h1>
+<div id="countdown">00:00:00</div>
+<img src="logo.svg" alt="" id="logo">
+<img src="rainbow.svg" alt="" id="rainbow">
+<img src="circle.svg" alt="" id="circle">
+<img src="dots.svg" alt="" id="dots">
+<img src="squares.svg" alt="" id="squares">
+<script>
+    const GOAL = Date.parse("2021-06-30T14:00:00");
+    const countdownElement = document.getElementById("countdown");
+
+    function cycle() {
+        const delta = GOAL - Date.now();
+        if (delta <= 0) {
+            countdownElement.innerHTML = "00:00:00";
+            return
+        }
+        let days = Math.floor(delta / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((delta % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((delta % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((delta % (1000 * 60)) / 1000);
+        days = days > 0 ? days + ":" : "";
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        countdownElement.innerHTML = `${days}${hours}:${minutes}:${seconds}`;
+        window.requestAnimationFrame(cycle);
+    }
+
+    cycle();
+</script>
+</body>
+</html>
