@@ -33,6 +33,7 @@ const createWindow = () => {
         if (projectorWindow)
             projectorWindow.close();
     })
+    mainWindow.removeMenu();
     // mainWindow.webContents.openDevTools();
 };
 
