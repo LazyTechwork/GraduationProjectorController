@@ -5,12 +5,39 @@
     <title>Система проектора для Выпускного 2021</title>
 </head>
 <body>
-<img src="static/logo.svg" alt="Logo" id="logo">
 <h1>ВЫПУСКНОЙ 2021</h1>
-<h2>Панель управления проектором</h2>
-<div id="control-buttons">
-    <button class="btn btn-outline-light" id="openProjectorWindow">Открыть проектор</button>
-    <button class="btn btn-outline-light" id="updateProjector">Обновить данные</button>
+<h2>Панели</h2>
+<div id="control-panels" class="mt-2">
+    <div id="panel-countdown">
+        <input type="text" class="form-control-sm" placeholder="Название">
+        <input type="datetime-local" class="form-control-sm" placeholder="До">
+        <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
+    </div>
+    <div id="panel-text">
+        <input type="text" class="form-control-sm" placeholder="Текст">
+        <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
+    </div>
+    <div id="panel-action">
+        <input type="text" class="form-control-sm" placeholder="Выступающий">
+        <input type="text" class="form-control-sm" placeholder="Название номера">
+        <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
+    </div>
+    <hr>
+    <div id="add" class="mb-3">
+        <input type="text" class="form-control-sm" value="action" placeholder="slug">
+        <select id="add-type" class="form-control-sm">
+            <option value="countdown">Обратный отсчёт</option>
+            <option value="text">Текст</option>
+            <option value="action">Выступление</option>
+        </select>
+        <button class="btn btn-sm btn-outline-light">Добавить</button>
+    </div>
+    <button class="btn btn-sm btn-outline-light mb-4">Обновить конфигурацию</button>
+</div>
+<h2>Управление</h2>
+<div id="control-buttons" class="mb-2">
+    <button class="btn btn-sm btn-outline-light" id="openProjectorWindow">Открыть проектор</button>
+    <button class="btn btn-sm btn-outline-light" id="updateProjector">Обновить данные</button>
 </div>
 </body>
 </html>

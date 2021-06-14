@@ -1,9 +1,4 @@
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/utilities";
-
-@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/bootstrap";
 
 *, *:before, *:after {
   font-family: "TT Commons", sans-serif;
@@ -22,10 +17,3 @@ html, body {
 body {
   padding: 50px;
 }
-
-#logo {
-  max-width: 25vw;
-  margin-bottom: 1.5em;
-}
-
-
