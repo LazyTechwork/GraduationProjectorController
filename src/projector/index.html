@@ -19,7 +19,7 @@
             height: 100vh;
         }
 
-        body {
+        body, .panel {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -39,7 +39,7 @@
             z-index: 150;
         }
 
-        #countdown {
+        #countdown-element {
             font-weight: bold;
             font-size: 136pt;
             z-index: 150;
@@ -95,37 +95,73 @@
                 transform: translateY(-100px);
             }
         }
+
+        .d-none {
+            display: none;
+        }
     </style>
 </head>
 <body>
-<h1>Выпускной 2021</h1>
-<div id="countdown">00:00:00</div>
+<div id="countdown-panel" class="panel">
+    <h1 id="countdown-title"></h1>
+    <div id="countdown-element">00:00:00</div>
+</div>
 <img src="static/logo.svg" alt="" id="logo">
 <img src="static/rainbow.svg" alt="" id="rainbow">
 <img src="static/circle.svg" alt="" id="circle">
 <img src="static/dots.svg" alt="" id="dots">
 <img src="static/squares.svg" alt="" id="squares">
 <script>
-    const GOAL = Date.parse("2021-06-30T14:00:00");
-    const countdownElement = document.getElementById("countdown");
+    const {ipcRenderer} = require("electron");
+
+    const panels = {countdown: document.getElementById("countdown-panel")}
+    const countdownElement = document.getElementById("countdown-element");
+    const countdownTitle = document.getElementById("countdown-title");
+    panels.countdown.classList.add("d-none");
+    let APP_DATA = null;
 
     function cycle() {
-        const delta = GOAL - Date.now();
-        if (delta <= 0) {
-            countdownElement.innerHTML = "00:00:00";
+        if (!APP_DATA)
             return
+        const panelInfo = APP_DATA.panels[APP_DATA.panel];
+        switch (panelInfo.type) {
+            case "countdown":
+                const delta = Date.parse(panelInfo.until) - Date.now();
+                if (delta <= 0) {
+                    countdownElement.innerHTML = "00:00:00";
+                    return
+                }
+                let days = Math.floor(delta / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((delta % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((delta % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((delta % (1000 * 60)) / 1000);
+                days = days > 0 ? days + ":" : "";
+                hours = hours < 10 ? (hours === 0 ? "" : "0" + hours + ":") : hours + ":";
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                countdownElement.innerHTML = `${days}${hours}${minutes}:${seconds}`;
+                countdownTitle.innerHTML = panelInfo.title;
+                if (panels.countdown.classList.contains("d-none"))
+                    panels.countdown.classList.remove("d-none");
+                break;
         }
-        let days = Math.floor(delta / (1000 * 60 * 60 * 24));
-        let hours = Math.floor((delta % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        let minutes = Math.floor((delta % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((delta % (1000 * 60)) / 1000);
-        days = days > 0 ? days + ":" : "";
-        hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        countdownElement.innerHTML = `${days}${hours}:${minutes}:${seconds}`;
         window.requestAnimationFrame(cycle);
     }
+
+    function updateData() {
+        ipcRenderer.send("read-config");
+    }
+
+    ipcRenderer.on("config", (event, args) => {
+        const temp = JSON.parse(args);
+        if (APP_DATA) {
+            const prevPanel = APP_DATA.panel;
+            if (temp.panel !== prevPanel)
+                panels[APP_DATA.panels[prevPanel].type].classList.add("d-none");
+        }
+        APP_DATA = temp;
+        cycle();
+    })
 </script>
 </body>
 </html>

@@ -4,10 +4,11 @@ const path = require('path');
 const assets = ["static"];
 
 rules.push({
-    test: /\.css$/,
+    test: /\.s[ac]ss$/i,
     use: [
-        {loader: 'style-loader'},
-        {loader: 'css-loader'}
+        "style-loader",
+        "css-loader",
+        "sass-loader",
     ]
 });
 
