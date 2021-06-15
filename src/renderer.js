@@ -43,12 +43,23 @@ ipcRenderer.on("projector-window-state", (event, args) => {
         openButton.innerHTML = "Закрыть проектор";
 });
 
+function callbackProjectorClosed() {
+    openButton.innerHTML = "Открыть проектор";
+}
+
 const panelController = document.getElementById("control-panels");
 const examplePanels = {
     countdown: document.getElementById("panel-example-countdown"),
     text: document.getElementById("panel-example-text"),
     action: document.getElementById("panel-example-action"),
+    video: document.getElementById("panel-example-video"),
 };
+
+
+function fileChooserToPath(event) {
+    console.log(event.target.files);
+    event.target.parentElement.querySelector("input[name=file]").value = event.target.files[0].path;
+}
 
 document.getElementById("add-button").addEventListener("click", () => {
     const slug = document.getElementById("add-slug").value;
@@ -60,6 +71,8 @@ document.getElementById("add-button").addEventListener("click", () => {
     newPanel.id = "panel-" + slug;
     newPanel.querySelector("input[name=slug]").value = slug;
     newPanel.querySelector("input[name=type]").value = type;
+    if (type === 'video')
+        newPanel.querySelector("input[name=filechooser]").addEventListener("change", fileChooserToPath);
     newPanel.querySelector("button.btn-activate").addEventListener("click", activateButtonHandler);
     panelController.appendChild(newPanel);
 });
@@ -88,6 +101,10 @@ function updatePanels() {
                 newPanel.querySelector("input[name=artist]").value = panelData.artist;
                 newPanel.querySelector("input[name=performance]").value = panelData.performance;
                 break;
+            case "video":
+                newPanel.querySelector("input[name=file]").value = panelData.file;
+                newPanel.querySelector("input[name=filechooser]").addEventListener("change", fileChooserToPath);
+                break;
         }
         panelController.appendChild(newPanel);
     }
@@ -99,7 +116,7 @@ function loadFromPanels(save = false, updateProjector = false) {
         const inputs = form.querySelectorAll("input");
         const panelData = {};
         for (const input of inputs)
-            if (input.getAttribute("name") !== "slug")
+            if (input.getAttribute("name") !== "slug" && input.getAttribute("name") !== "filechooser")
                 panelData[input.getAttribute("name")] = input.value;
         NEW_DATA.panels[form.querySelector("input[name=slug]").value] = panelData;
     }

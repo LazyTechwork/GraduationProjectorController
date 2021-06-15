@@ -128,6 +128,9 @@
     <h1 id="action-performance"></h1>
     <h3 id="action-artist"></h3>
 </div>
+<div id="video-panel" class="panel">
+    <div id="video"></div>
+</div>
 <img src="static/logo.svg" alt="" id="logo">
 <img src="static/rainbow.svg" alt="" id="rainbow">
 <img src="static/circle.svg" alt="" id="circle">
@@ -139,22 +142,29 @@
     const panels = {
         countdown: document.getElementById("countdown-panel"),
         text: document.getElementById("text-panel"),
-        action: document.getElementById("action-panel")
+        action: document.getElementById("action-panel"),
+        video: document.getElementById("video-panel"),
     }
     const countdownElement = document.getElementById("countdown-element");
     const countdownTitle = document.getElementById("countdown-title");
 
     const textText = document.getElementById("text-text");
 
+    const videoElement = document.getElementById("video");
+
     const actionPerformance = document.getElementById("action-performance");
     const actionArtist = document.getElementById("action-artist");
+
     panels.countdown.classList.add("d-none");
     let APP_DATA = null;
+    let changed = true;
 
     function cycle() {
         if (!APP_DATA)
             return
         const panelInfo = APP_DATA.panels[APP_DATA.panel];
+        if (!changed && panelInfo.type !== "countdown")
+            return window.requestAnimationFrame(cycle);
         switch (panelInfo.type) {
             case "countdown":
                 countdownTitle.innerHTML = panelInfo.title;
@@ -180,6 +190,11 @@
                 if (panels.text.classList.contains("d-none"))
                     panels.text.classList.remove("d-none");
                 break;
+            case "video":
+                videoElement.innerHTML = panelInfo.file;
+                if (panels.video.classList.contains("d-none"))
+                    panels.video.classList.remove("d-none");
+                break;
             case "action":
                 actionArtist.innerHTML = panelInfo.artist;
                 actionPerformance.innerHTML = panelInfo.performance;
@@ -187,6 +202,7 @@
                     panels.action.classList.remove("d-none");
                 break;
         }
+        changed = false;
         window.requestAnimationFrame(cycle);
     }
 
@@ -202,6 +218,7 @@
                 panels[APP_DATA.panels[prevPanel].type].classList.add("d-none");
         }
         APP_DATA = temp;
+        changed = true;
         cycle();
     });
 

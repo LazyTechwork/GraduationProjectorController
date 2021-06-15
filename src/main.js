@@ -81,7 +81,10 @@ ipcMain.on("projector-window", (event) => {
         }
     });
     projectorWindow.loadFile(`${__dirname}/projector/index.html`);
-    projectorWindow.on("close", () => projectorWindow = null);
+    projectorWindow.on("close", () => {
+        projectorWindow = null;
+        mainWindow.webContents.executeJavaScript(`callbackProjectorClosed();`);
+    });
     event.reply("projector-window-state", "opened");
     return true;
 })
