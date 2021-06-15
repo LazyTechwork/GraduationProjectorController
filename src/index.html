@@ -8,33 +8,37 @@
 <img src="static/iisdf_full_white.svg" id="logo" alt="IISDF Logo">
 <h1 class="mt-2 mb-5">Система проектора для Выпускного 2021</h1>
 <h2>Панели</h2>
-<div id="control-panels" class="mt-2">
-    <div id="panel-countdown">
-        <input type="text" class="form-control-sm" placeholder="Название">
-        <input type="datetime-local" class="form-control-sm" placeholder="До">
+<div id="panel-examples">
+    <form id="panel-example-countdown" class="d-none">
+        <input name="title" type="text" class="form-control-sm" placeholder="Название">
+        <input name="until" type="datetime-local" class="form-control-sm" placeholder="До">
         <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
-    </div>
-    <div id="panel-text">
-        <input type="text" class="form-control-sm" placeholder="Текст">
+    </form>
+    <form id="panel-example-text" class="d-none">
+        <input name="text" type="text" class="form-control-sm" placeholder="Текст">
         <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
-    </div>
-    <div id="panel-action">
-        <input type="text" class="form-control-sm" placeholder="Выступающий">
-        <input type="text" class="form-control-sm" placeholder="Название номера">
+    </form>
+    <form id="panel-example-action" class="d-none">
+        <input name="artist" type="text" class="form-control-sm" placeholder="Выступающий">
+        <input name="performance" type="text" class="form-control-sm" placeholder="Название номера">
         <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
-    </div>
-    <hr>
-    <div id="add" class="mb-3">
-        <input type="text" class="form-control-sm" value="action" placeholder="slug">
-        <select id="add-type" class="form-control-sm">
-            <option value="countdown">Обратный отсчёт</option>
-            <option value="text">Текст</option>
-            <option value="action">Выступление</option>
-        </select>
-        <button class="btn btn-sm btn-outline-light">Добавить</button>
-    </div>
-    <button class="btn btn-sm btn-outline-light mb-4">Обновить конфигурацию</button>
+    </form>
 </div>
+<div id="control-panels" class="mt-2">
+
+</div>
+<hr>
+<div id="add" class="mb-3">
+    <input type="text" class="form-control-sm" value="action" placeholder="slug">
+    <select id="add-type" class="form-control-sm">
+        <option value="countdown">Обратный отсчёт</option>
+        <option value="text">Текст</option>
+        <option value="action">Выступление</option>
+    </select>
+    <button class="btn btn-sm btn-outline-light">Добавить</button>
+</div>
+<button id="save-config" class="btn btn-sm btn-outline-light mb-4">Сохранить конфигурацию</button>
+<button id="load-config" class="btn btn-sm btn-outline-light mb-4">Загрузить конфигурацию</button>
 <h2>Управление</h2>
 <div id="control-buttons" class="mb-2">
     <button class="btn btn-sm btn-outline-light" id="openProjectorWindow">Открыть проектор</button>

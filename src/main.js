@@ -18,8 +18,8 @@ let mainWindow = null;
 let projectorWindow = null;
 const createWindow = () => {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1000,
+        height: 1000,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -33,9 +33,34 @@ const createWindow = () => {
         if (projectorWindow)
             projectorWindow.close();
     })
-    mainWindow.removeMenu();
+    // mainWindow.removeMenu();
+    mainWindow.maximize();
     // mainWindow.webContents.openDevTools();
 };
+
+app.on('ready', createWindow);
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
+
+fs.readFile(app.getAppPath() + "/data.json", 'utf8', (err, data) => {
+    if (err) {
+        fs.writeFile(app.getAppPath() + "/data.json", JSON.stringify(APP_DATA), (err, result) => {
+            if (err) console.log('error', err);
+        });
+    }
+});
+
+// EVENTS
 
 ipcMain.on("projector-window", (event) => {
     if (projectorWindow) {
@@ -75,25 +100,4 @@ ipcMain.on("read-config", (event) => {
             event.reply("config", data);
         }
     });
-});
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
-});
-fs.readFile(app.getAppPath() + "/data.json", 'utf8', (err, data) => {
-    if (err) {
-        fs.writeFile(app.getAppPath() + "/data.json", JSON.stringify(APP_DATA), (err, result) => {
-            if (err) console.log('error', err);
-        });
-    }
 });
