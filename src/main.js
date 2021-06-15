@@ -101,3 +101,9 @@ ipcMain.on("read-config", (event) => {
         }
     });
 });
+
+ipcMain.on("save-config", (event, data) => {
+    fs.writeFile(app.getAppPath() + "/data.json", JSON.stringify(data), (err, result) => {
+        if (err) console.log('error', err);
+    });
+});

@@ -126,6 +126,7 @@
         const panelInfo = APP_DATA.panels[APP_DATA.panel];
         switch (panelInfo.type) {
             case "countdown":
+                countdownTitle.innerHTML = panelInfo.title;
                 const delta = Date.parse(panelInfo.until) - Date.now();
                 if (delta <= 0) {
                     countdownElement.innerHTML = "00:00:00";
@@ -140,7 +141,6 @@
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
                 countdownElement.innerHTML = `${days}${hours}${minutes}:${seconds}`;
-                countdownTitle.innerHTML = panelInfo.title;
                 if (panels.countdown.classList.contains("d-none"))
                     panels.countdown.classList.remove("d-none");
                 break;
