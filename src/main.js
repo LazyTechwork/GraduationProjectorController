@@ -92,6 +92,18 @@ ipcMain.on("update-projector", () => {
     projectorWindow.webContents.executeJavaScript(`updateData();`);
 });
 
+ipcMain.on("zoom", (event, args) => {
+    if (!projectorWindow)
+        return false;
+    projectorWindow.webContents.executeJavaScript(`zoom(${args});`);
+});
+
+ipcMain.on("zoom-reset", () => {
+    if (!projectorWindow)
+        return false;
+    projectorWindow.webContents.executeJavaScript(`resetZoom();`);
+});
+
 ipcMain.on("read-config", (event) => {
     fs.readFile(app.getAppPath() + "/data.json", 'utf8', (err, data) => {
         if (err) {

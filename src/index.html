@@ -9,20 +9,20 @@
 <h1 class="mt-2 mb-5">Система проектора для Выпускного 2021</h1>
 <h2>Панели</h2>
 <div id="panel-examples">
-    <form id="panel-example-countdown" class="d-none">
+    <form id="panel-example-countdown" class="d-none" onsubmit="return false">
         <input name="slug" type="text" class="d-none" hidden>
         <input name="type" type="text" class="d-none" hidden>
         <input name="title" type="text" class="form-control-sm" placeholder="Название">
         <input name="until" type="datetime-local" class="form-control-sm" placeholder="До">
         <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
     </form>
-    <form id="panel-example-text" class="d-none">
+    <form id="panel-example-text" class="d-none" onsubmit="return false">
         <input name="slug" type="text" class="d-none" hidden>
         <input name="type" type="text" class="d-none" hidden>
         <input name="text" type="text" class="form-control-sm" placeholder="Текст">
         <button class="btn btn-sm btn-outline-light btn-activate">Активировать</button>
     </form>
-    <form id="panel-example-action" class="d-none">
+    <form id="panel-example-action" class="d-none" onsubmit="return false">
         <input name="slug" type="text" class="d-none" hidden>
         <input name="type" type="text" class="d-none" hidden>
         <input name="artist" type="text" class="form-control-sm" placeholder="Выступающий">
@@ -35,13 +35,15 @@
 </div>
 <hr>
 <div id="add" class="mb-3">
-    <input type="text" class="form-control-sm" value="action" placeholder="slug">
-    <select id="add-type" class="form-control-sm">
-        <option value="countdown">Обратный отсчёт</option>
-        <option value="text">Текст</option>
-        <option value="action">Выступление</option>
-    </select>
-    <button class="btn btn-sm btn-outline-light">Добавить</button>
+    <form action="#" method="GET" onsubmit="return false">
+        <input id="add-slug" type="text" class="form-control-sm" placeholder="slug">
+        <select id="add-type" class="form-control-sm">
+            <option value="countdown">Обратный отсчёт</option>
+            <option value="text">Текст</option>
+            <option value="action">Выступление</option>
+        </select>
+        <button id="add-button" class="btn btn-sm btn-outline-light">Добавить</button>
+    </form>
 </div>
 <button id="save-config" class="btn btn-sm btn-outline-light mb-4">Сохранить конфигурацию</button>
 <button id="load-config" class="btn btn-sm btn-outline-light mb-4">Загрузить конфигурацию</button>
@@ -49,6 +51,10 @@
 <div id="control-buttons" class="mb-2">
     <button class="btn btn-sm btn-outline-light" id="openProjectorWindow">Открыть проектор</button>
     <button class="btn btn-sm btn-outline-light" id="updateProjector">Обновить данные</button>
+    <br>
+    <button class="btn btn-sm btn-outline-light" id="zoomOut">Уменьшить</button>
+    <button class="btn btn-sm btn-outline-light" id="zoomIn">Увеличить</button>
+    <button class="btn btn-sm btn-outline-light" id="zoomReset">Сброс</button>
 </div>
 <p class="mt-5">Создано Иваном Петровым. &copy; 2021, Фонд развития информационных и интеллектуальных систем</p>
 </body>

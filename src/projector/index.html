@@ -99,6 +99,21 @@
         .d-none {
             display: none;
         }
+
+        #text-text {
+            font-weight: normal;
+            font-size: 52pt;
+        }
+
+        #action-performance {
+            font-weight: bold;
+            font-size: 52pt;
+        }
+
+        #action-artist {
+            font-weight: normal;
+            font-size: 36pt;
+        }
     </style>
 </head>
 <body>
@@ -106,17 +121,33 @@
     <h1 id="countdown-title"></h1>
     <div id="countdown-element">00:00:00</div>
 </div>
+<div id="text-panel" class="panel">
+    <h2 id="text-text"></h2>
+</div>
+<div id="action-panel" class="panel">
+    <h1 id="action-performance"></h1>
+    <h3 id="action-artist"></h3>
+</div>
 <img src="static/logo.svg" alt="" id="logo">
 <img src="static/rainbow.svg" alt="" id="rainbow">
 <img src="static/circle.svg" alt="" id="circle">
 <img src="static/dots.svg" alt="" id="dots">
 <img src="static/squares.svg" alt="" id="squares">
 <script>
-    const {ipcRenderer} = require("electron");
+    const {ipcRenderer, webFrame} = require("electron");
 
-    const panels = {countdown: document.getElementById("countdown-panel")}
+    const panels = {
+        countdown: document.getElementById("countdown-panel"),
+        text: document.getElementById("text-panel"),
+        action: document.getElementById("action-panel")
+    }
     const countdownElement = document.getElementById("countdown-element");
     const countdownTitle = document.getElementById("countdown-title");
+
+    const textText = document.getElementById("text-text");
+
+    const actionPerformance = document.getElementById("action-performance");
+    const actionArtist = document.getElementById("action-artist");
     panels.countdown.classList.add("d-none");
     let APP_DATA = null;
 
@@ -144,6 +175,17 @@
                 if (panels.countdown.classList.contains("d-none"))
                     panels.countdown.classList.remove("d-none");
                 break;
+            case "text":
+                textText.innerHTML = panelInfo.text;
+                if (panels.text.classList.contains("d-none"))
+                    panels.text.classList.remove("d-none");
+                break;
+            case "action":
+                actionArtist.innerHTML = panelInfo.artist;
+                actionPerformance.innerHTML = panelInfo.performance;
+                if (panels.action.classList.contains("d-none"))
+                    panels.action.classList.remove("d-none");
+                break;
         }
         window.requestAnimationFrame(cycle);
     }
@@ -161,7 +203,17 @@
         }
         APP_DATA = temp;
         cycle();
-    })
+    });
+
+    function zoom(k) {
+        webFrame.setZoomFactor(webFrame.getZoomFactor() + k);
+    }
+
+    function resetZoom() {
+        webFrame.setZoomFactor(1.0);
+    }
+
+    webFrame.setZoomFactor(1.0);
 </script>
 </body>
 </html>

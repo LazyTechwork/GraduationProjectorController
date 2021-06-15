@@ -13,6 +13,16 @@ document.getElementById("updateProjector").addEventListener("click", () => {
     ipcRenderer.send("update-projector");
 });
 
+document.getElementById("zoomIn").addEventListener("click", () => {
+    ipcRenderer.send("zoom", 0.05);
+});
+document.getElementById("zoomOut").addEventListener("click", () => {
+    ipcRenderer.send("zoom", -0.05);
+});
+document.getElementById("zoomReset").addEventListener("click", () => {
+    ipcRenderer.send("zoom-reset");
+});
+
 document.getElementById("load-config").addEventListener("click", () => {
     ipcRenderer.send("read-config");
 });
@@ -20,6 +30,11 @@ document.getElementById("load-config").addEventListener("click", () => {
 document.getElementById("save-config").addEventListener("click", () => {
     loadFromPanels(true);
 });
+
+function activateButtonHandler(event) {
+    APP_DATA.panel = event.target.parentElement.querySelector("input[name=slug]").value;
+    loadFromPanels(true, true)
+}
 
 ipcRenderer.on("projector-window-state", (event, args) => {
     if (args === 'closed')
@@ -35,6 +50,20 @@ const examplePanels = {
     action: document.getElementById("panel-example-action"),
 };
 
+document.getElementById("add-button").addEventListener("click", () => {
+    const slug = document.getElementById("add-slug").value;
+    if (APP_DATA.panels[slug])
+        return false;
+    const type = document.getElementById("add-type").value;
+    const newPanel = examplePanels[type].cloneNode(true);
+    newPanel.classList.remove("d-none");
+    newPanel.id = "panel-" + slug;
+    newPanel.querySelector("input[name=slug]").value = slug;
+    newPanel.querySelector("input[name=type]").value = type;
+    newPanel.querySelector("button.btn-activate").addEventListener("click", activateButtonHandler);
+    panelController.appendChild(newPanel);
+});
+
 function updatePanels() {
     panelController.innerHTML = "";
     for (const panelName in APP_DATA.panels) {
@@ -46,6 +75,7 @@ function updatePanels() {
         newPanel.id = "panel-" + panelName;
         newPanel.querySelector("input[name=slug]").value = panelName;
         newPanel.querySelector("input[name=type]").value = panelData.type;
+        newPanel.querySelector("button.btn-activate").addEventListener("click", activateButtonHandler);
         switch (panelData.type) {
             case "countdown":
                 newPanel.querySelector("input[name=title]").value = panelData.title;
@@ -63,7 +93,7 @@ function updatePanels() {
     }
 }
 
-function loadFromPanels(save = false) {
+function loadFromPanels(save = false, updateProjector = false) {
     const NEW_DATA = {panel: APP_DATA.panel, panels: {}}
     for (const form of panelController.querySelectorAll("form")) {
         const inputs = form.querySelectorAll("input");
@@ -78,6 +108,8 @@ function loadFromPanels(save = false) {
 
     if (save)
         ipcRenderer.send("save-config", APP_DATA);
+    if (updateProjector)
+        ipcRenderer.send("update-projector");
 }
 
 ipcRenderer.on("config", (event, args) => {
